@@ -11,7 +11,7 @@ using namespace std;
 class Solution {
 public:
     int findMidSum(int ar1[], int ar2[], int n) {
-            int low = 0,high=n;
+        int low = 0,high=n;
         while(low <= high){
             int cut1 = (low + high)>>1 ;
             int cut2 = n - cut1;
