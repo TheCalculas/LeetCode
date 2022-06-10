@@ -1,11 +1,22 @@
 class Solution {
 public:
-    bool canJump(vector<int>& A) {
-        int n = A.size();
-    int i = 0;
-    for (int reach = 0; i < n && i <= reach; ++i)
-        reach = max(i + A[i], reach);
-    return i == n;
-
+        bool canJump(vector<int>& nums) {
+        int n = nums.size();
+        vector<bool> jump(n,false);
+        jump[n-1]=true;
+        
+        for(int i=n-2;i>=0;i--)
+        {
+            for(int j=0;j<=nums[i] && i+j<n;j++)
+            {
+                if(jump[i+j]==true) 
+                {
+                    jump[i]=true; 
+                    break;
+                }
+            }
+        }
+        
+        return jump[0];
     }
 };
