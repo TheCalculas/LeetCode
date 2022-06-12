@@ -1,25 +1,35 @@
-class Solution
-{
-    public:
-        vector<vector < int>> permute(vector<int> &nums)
-        {
-            vector<vector < int>> res;
-            DFS(res, nums, 0);
-            return res;
-        }
-
-    void DFS(vector<vector < int>> &res, vector< int > &nums, int pos)
+class Solution {
+public:
+    
+    void permuteAll(vector<int>nums, vector<int> &ans, vector<int> &vis, vector<vector<int>>&output)
     {
-        if (pos == nums.size() - 1)
+        if(ans.size()==nums.size())
         {
-            res.push_back(nums);
+            output.push_back(ans);
             return;
         }
-        for (int i = pos; i < nums.size(); i++)
+        
+        for(int i=0; i<nums.size(); i++)
         {
-            swap(nums[pos], nums[i]);
-            DFS(res, nums, pos + 1);
-            swap(nums[pos], nums[i]);
+            
+            int a = nums[i];
+            if(!vis[i])
+            {
+                vis[i]=1;
+                ans.push_back(a);
+                permuteAll(nums, ans, vis, output);
+                ans.pop_back();
+                vis[i]=0;
+             }
+                
         }
+    }
+    vector<vector<int>> permute(vector<int>& nums) {
+        int n= nums.size();
+        vector<vector<int>> output;
+        vector<int> vis(n,0);
+        vector<int> ans;
+        permuteAll(nums, ans, vis, output);
+        return output;
     }
 };
