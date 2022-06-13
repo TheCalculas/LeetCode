@@ -3,21 +3,11 @@ class Solution
     public:
         int addDigits(int num)
         {
-            int tmp = 0;
-            while (true)
-            {
-                tmp += num % 10;
-                num /= 10;
-                if (num == 0)
-                {
-                    if (tmp < 10)
-                    {
-                        return tmp;
-                    }
-                    num = tmp;
-                    tmp = 0;
-                }
-            }
-            return -1;
+            if (num == 0)
+                return 0;
+            else if (num % 9 == 0)
+                return 9;
+            else
+                return num % 9;
         }
 };
