@@ -1,4 +1,3 @@
-
 #define ll long long int
 class Solution
 {
