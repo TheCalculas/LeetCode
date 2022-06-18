@@ -1,11 +1,8 @@
 class Solution {
 public:
     int numTrees(int n) {
-        vector<int> dp(n+1);
-        dp[0] = dp[1] = 1;
-        for(int i = 2; i <= n; i++) 
-            for(int j = 1; j <= i; j++)
-                dp[i] += dp[j-1] * dp[i-j];
-        return dp[n];
+        double prod=1.0;
+        for(double i=2*n,j=n;i>n+1,j>1;i-=1,j-=1) prod*=(i/j);
+        return round(prod);
     }
 };
