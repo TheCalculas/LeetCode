@@ -8,7 +8,7 @@ public:
         if(dp[n][m]!=-1) return dp[n][m];
         if(s[n-1]==t[m-1]) return dp[n][m] = 1+ lcs(s, t, n-1, m-1);
         else{
-            return dp[n][m] = max(lcs(s,t,n, m-1), lcs(s, t, n-1,m));
+            return dp[n][m] = (lcs(s,t,n, m-1));
         }
     }
     bool isSubsequence(string s, string t) {
