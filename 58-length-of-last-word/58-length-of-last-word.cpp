@@ -4,10 +4,12 @@ public:
         stringstream ss(s);
         string c;
         string a;
-        while(ss>>c)
+        while(ss  >>   c)
         {
+            cout<<c<<" ";
             a = c;
         }
+        cout<<endl;
         return a.size();
             
     }
