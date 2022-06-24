@@ -1,25 +1,39 @@
 class Solution {
 public:
     vector<vector<int>> matrixBlockSum(vector<vector<int>>& mat, int k) {
-       
-        int row=mat.size();
-        int col=mat[0].size();
-         vector<vector<int>>ans(row,vector<int>(col));
-        for(int i=0;i<row;i++)
-        {
-            for(int j=0;j<col;j++)
-            {
-                int s=0;
-                for(int l=( i-k<0 ? 0:i-k );l<=( i+k>row-1 ? row-1:i+k) ;l++)
-                {
-                    for(int m=( j-k<0 ? 0:j-k);m<=( j+k>col-1 ? col-1:j+k );m++)
-                    {
-                        s=s+mat[l][m];
-                    }
+        vector<vector<int>> prefix(mat);
+        for(int i=0;i<mat.size();i++){
+            for(int j=0;j<mat[0].size();j++){
+                // is i-1 is over 0 then add i-1, if j-1 over 0 add j-1
+                if(i-1>=0){
+                    prefix[i][j] += prefix[i-1][j];
                 }
-                ans[i][j]=s;
+                if(j-1>=0){
+                    prefix[i][j] += prefix[i][j-1];
+                }
+                if(j-1>=0 & i-1>= 0){
+                    prefix[i][j] -= prefix[i-1][j-1];
+                }
             }
         }
-        return ans;
+        int m = mat.size();
+        int n = mat[0].size();
+        vector<vector<int>> res(mat);
+        for(int i=0;i<mat.size();i++){
+            for(int j=0;j<mat[0].size();j++){
+                // is i-1 is over 0 then add i-1, if j-1 over 0 add j-1
+                res[i][j] = prefix[min(m-1,i+k)][min(n-1,j+k)];
+                if(i-k-1>=0){
+                    res[i][j] -= prefix[i-k-1][min(n-1,j+k)];
+                }
+                if(j-k-1>=0){
+                    res[i][j] -= prefix[min(m-1,i+k)][j-k-1];
+                }
+                if(i-k-1>=0&&j-k-1>=0){
+                    res[i][j] += prefix[i-k-1][j-k-1];
+                }
+            }
+        }
+        return res;
     }
 };
