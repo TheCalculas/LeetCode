@@ -1,17 +1,15 @@
 class Solution {
 public:
     int nthUglyNumber(int n) {
-        if(n <= 0) return false; 
-        if(n == 1) return true; 
-        int t2 = 0, t3 = 0, t5 = 0; 
-        vector<int> k(n);
-        k[0] = 1;
-        for(int i  = 1; i < n ; i ++)
-        {
-            k[i] = min(k[t2]*2,min(k[t3]*3,k[t5]*5));
-            if(k[i] == k[t2]*2) t2++; 
-            if(k[i] == k[t3]*3) t3++;
-            if(k[i] == k[t5]*5) t5++;
+        if(n<=1){return n;}
+        int k[n];
+        k[0]=1;
+        int c2=0, c3=0, c5=0;
+        for(int i=1;i<n;i++){
+            k[i]=min(k[c2]*2,min(k[c3]*3, k[c5]*5));
+            if(k[i]==k[c2]*2){c2++;}
+            if(k[i]==k[c3]*3){c3++;}
+            if(k[i]==k[c5]*5){c5++;}
         }
         return k[n-1];
     }
