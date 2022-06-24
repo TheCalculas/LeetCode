@@ -1,50 +1,44 @@
-class Solution
-{
-    public:
-        int minFallingPathSum(vector<vector < int>> &matrix)
-        {
-            int n = matrix.size();
-            int m = matrix[0].size();
-
-            int dp[n][m];
-
-            int mn = INT_MAX;
-            for (int i = 0; i < m; i++)
-            {
-                dp[0][i] = matrix[0][i];
-
-                if (mn > dp[0][i])
-                {
-                    mn = dp[0][i];
-                }
-            }
-
-            for (int i = 1; i < n; i++)
-            {
-                mn = INT_MAX;
-
-                for (int j = 0; j < m; j++)
-                {
-                    if (j == 0)
-                    {
-                        dp[i][j] = matrix[i][j] + min(dp[i - 1][j], dp[i - 1][j + 1]);
-                    }
-                    else if (j == m - 1)
-                    {
-                        dp[i][j] = matrix[i][j] + min(dp[i - 1][j], dp[i - 1][j - 1]);
-                    }
-                    else
-                    {
-                        dp[i][j] = matrix[i][j] + min(dp[i - 1][j], min(dp[i - 1][j - 1], dp[i - 1][j + 1]));
-                    }
-
-                    if (mn > dp[i][j])
-                    {
-                        mn = dp[i][j];
-                    }
-                }
-            }
-
-            return mn;
+class Solution {
+public:
+    int t[101][101];
+    int  solve(vector<vector<int>>& matrix,int i , int j , int row , int col){
+        // if(i==row-1 && (j>=0 || j<col))
+        //    return 0;
+        // if(i<0 || j<0)
+        //     return 10000;
+        // if(i>=row || j>=col)
+        //     return 10000;
+         
+         if(i>=row) return 0;
+         if(j<0 || j>=col) return 10000;
+         if(t[i][j]!=-1)
+             return t[i][j];
+        
+        
+         int   ans=INT_MAX;
+        
+            int down=matrix[i][j]+solve(matrix,i+1,j-1,row,col);
+            int dl=matrix[i][j]+solve(matrix,i+1,j,row,col);
+            int  dr=matrix[i][j]+solve(matrix,i+1,j+1,row,col);
+            int  temp=min(down,min(dl,dr));
+        
+            ans=min(temp,ans);
+            
+        
+        
+        return t[i][j]=ans;
+    }
+    int minFallingPathSum(vector<vector<int>>& matrix) {
+        memset(t,-1,sizeof(t));
+        int row=matrix.size();
+        int col=matrix[0].size();
+        int ans=INT_MAX;
+        for(int j=0;j<col;j++){
+            
+            int temp=solve(matrix,0,j,row,col);
+            ans=min(ans,temp);
+            cout<<ans<<endl;
         }
+        return ans;
+    }
 };
