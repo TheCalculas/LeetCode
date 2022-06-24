@@ -7,6 +7,8 @@ public:
         for(int i = 1; i < nums.size(); i++){
             nums[i - 1] = nums[i - 1] - nums[i];
         }
+        for(auto x: nums)cout<<x<<" ";
+        cout<<endl;
         nums[nums.size() - 1] = INT_MIN;
         int target = nums[0];
         int count = 0;
@@ -16,6 +18,7 @@ public:
                 count++;
                 continue;
             }
+            // agar prev target is not equal then
             if(count > 1){
                 sum += (count - 1) * count / 2;
             }
