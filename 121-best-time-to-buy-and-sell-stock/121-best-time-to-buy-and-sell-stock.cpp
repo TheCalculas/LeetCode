@@ -12,7 +12,7 @@ public:
             if(prices[i]<leastNo)
                 leastNo = prices[i];
             profit = prices[i]-leastNo;
-            maxProfit = max(profit, maxProfit);
+            maxProfit =  max(profit, maxProfit);
         }
         return maxProfit;
     }
