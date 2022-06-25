@@ -1,22 +1,42 @@
-class Solution
-{
-    public:
-        bool isValidSudoku(vector<vector < char>> &board)
-        {
-            int used1[9][9] = { 0
-            }, used2[9][9] = { 0
-            }, used3[9][9] = { 0 };
-
-            for (int i = 0; i < board.size(); ++i)
-                for (int j = 0; j < board[i].size(); ++j)
-                    if (board[i][j] != '.')
-                    {
-                        int num = board[i][j] - '0' - 1, k = i / 3 * 3 + j / 3;
-                        if (used1[i][num] || used2[j][num] || used3[k][num])
-                            return false;
-                        used1[i][num] = used2[j][num] = used3[k][num] = 1;
-                    }
-
-            return true;
+class Solution {
+public:
+    bool safe(vector<vector<char>>& board,int i,int j,int n){
+        int N=board.size();
+        for(int k=0;k<N;k++){
+            if(board[i][k]==n+'0' || board[k][j]==n+'0'){
+                return false;
+            }
         }
+        int s=sqrt(N);
+        int x=i-i%s;
+        int y=j-j%s;
+        for(int p=0;p<s;p++){
+            for(int q=0;q<s;q++){
+                if(board[x+p][y+q]==n+'0'){
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+    bool solve(vector<vector<char>>& board){
+        int N=board.size();
+        int i,j,n;
+        for(i=0;i<N;i++){
+            for(j=0;j<N;j++){
+                if(board[i][j]!='.'){
+                    n=board[i][j]-'0';
+                    board[i][j]='.';
+                    if(!safe(board,i,j,n)){
+                        return false;
+                    }
+                    board[i][j]=n+'0';
+                }
+            }
+        }
+        return true;
+    }
+    bool isValidSudoku(vector<vector<char>>& board) {
+        return solve(board);
+    }
 };
