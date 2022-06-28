@@ -15,7 +15,6 @@ class Solution
                     dp[j] = s[i] == s[j] ? dp2[j - 1] + 2 : max(dp2[j], dp[j - 1]);
                 }
                 dp2.swap(dp);
-                dp.clear();
             }
             return dp2[n - 1];
         }
