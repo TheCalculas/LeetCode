@@ -1,27 +1,28 @@
-class Solution {
-public:
-    int longestArithSeqLength(vector<int>& nums) {
-        int lastindex[501], seqs[1000][501]; // seqs[i] goes from -250 to 250 
-        fill_n(lastindex, 501, -1);
-        int res = 2;
-        for(int i = 0; i < nums.size(); i++)
+class Solution
+{
+    public:
+        int longestArithSeqLength(vector<int> &a)
         {
-            int n = nums[i];
-            for(int j = 0; j <= 500; j++)
+            unordered_map<int, int> mp;
+            int n = a.size();
+            if (n <= 2)
+                return n;
+            int dp[1001][1001];
+            int maxi = 2;
+            for (int i = 0; i < n - 1; i++)
             {
-                seqs[i][j] = 1;
-                int n2 = n + (j - 250);
-                if(n2 >= 0 && n2 <= 500)
+                for (int j = i + 1; j < n; j++)
                 {
-                    if(lastindex[n2] != -1)
+                    dp[i][j] = 2;
+                    int need = 2 *a[i] - a[j];
+                    if (mp.find(need) != mp.end())
                     {
-                        seqs[i][j] = seqs[lastindex[n2]][j] + 1;
-                        res = max(res, seqs[i][j]);
+                        dp[i][j] = max(dp[i][j], 1 + dp[mp[need]][i]);
+                        maxi = max(maxi, dp[i][j]);
                     }
                 }
+                mp[a[i]] = i;
             }
-            lastindex[n] = i;
+            return maxi;
         }
-        return res;
-    }
 };
