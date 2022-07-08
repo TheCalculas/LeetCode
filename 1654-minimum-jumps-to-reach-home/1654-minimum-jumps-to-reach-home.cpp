@@ -1,37 +1,52 @@
-class Solution {
-public:
-    // to track the forbidden positions
-    unordered_map<int,int>m;
-    int dp[7001][2];
-    int solve(int i,bool back,int a,int b,int x)
+class Solution
+{
+    public:
+        int forbidden[8000];
+    int seen[8000][2];
+
+    int minimumJumps(vector<int> &forb, int a, int b, int x)
     {
-        // base case
-        if(i == x)return 0;
-        // you cannot land on -ve n0.and blocked positions
-        if( i < 0 || m.find(i)!= m.end() || i>6000 )
-            return 1e9;
-        
-        
-        if(dp[i][back]!=-1)return dp[i][back];
-        int forward = 0;
-        // either go forward 
-        dp[i][back] = 1 + solve(i+a,0,a,b,x);
-        //go backward but cannot go consecutively 2 times
-        if(!back)
+        for (auto x: forb) forbidden[x] = 1;
+
+        queue<pair<int, bool>> q;
+        q.push({ 0,
+            false });
+        seen[0][0] = 1;
+
+        int jumps = 0;
+        while (!q.empty())
         {
-            dp[i][back] = min(dp[i][back],1 + solve(i-b,1,a,b,x));
+            int size = q.size();
+
+            for (int i = 0; i < size; ++i)
+            {
+                auto[pos, isBackward] = q.front();
+                q.pop();
+
+                if (pos == x)
+                {
+                    return jumps;
+                }
+
+               	// Go forward
+                if (!seen[pos + a][0] && pos < 4000 && !forbidden[pos + a])
+                {
+                    seen[pos + a][0] = 1;
+                    q.push({ pos + a,
+                        false });
+                }
+
+               	// Go backward
+                if (!isBackward && pos - b > 0 && !seen[pos - b][1] && !forbidden[pos - b])
+                {
+                    seen[pos - b][1] = 1;
+                    q.push({ pos - b,
+                        true });
+                }
+            }
+            ++jumps;
         }
-      
-        return dp[i][back];
-    }
-    int minimumJumps(vector<int>& forbidden, int a, int b, int x) {
-        
-        for(int i = 0 ; i<forbidden.size();i++)
-            m[forbidden[i]] = 1;
-        
-        memset(dp,-1,sizeof(dp));
-        int ans = solve(0,0,a,b,x);
-        if(ans > 1e9)return -1;
-        return ans;
+
+        return -1;
     }
 };
