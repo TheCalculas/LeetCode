@@ -1,29 +1,63 @@
+int tar;
+
 class Solution {
 public:
-    bool makesquare(vector<int>& matchsticks) {
-        int sum = 0;
-        sum = accumulate(matchsticks.begin(), matchsticks.end(), sum);
-        if (matchsticks.size() < 4 || sum % 4) return false;
-        
-        vector<int>visited(matchsticks.size(), false);
-        return backtrack(matchsticks, visited, sum / 4, 0, 0, 4);
-    }
-    
-    bool backtrack(vector<int>& matchsticks,vector<int>&visited, int target, int curr_sum, int i, int k) {
-        if (k == 1) // if k == 1 then we found all subsets
-            return true;
-        
-        if (curr_sum == target) // we found one subset, go on to the next one starting from curr_sum = 0
-            return backtrack(matchsticks, visited, target, 0, 0, k-1);
-        
-        for (int j = i; j < matchsticks.size(); j++) {
-            if (visited[j] || curr_sum + matchsticks[j] > target) continue; // if we visited this index already or curr_sum + matchsticks[j] > target then we can't use it
-            
-            visited[j] = true;
-            if (backtrack(matchsticks, visited, target, curr_sum + matchsticks[j], j+1, k)) return true;
-            visited[j] = false;
+    void tryForm(int idx, vector<int>& mat, int sum, vector<int>& row, int mask, int pre) {
+        if (sum == tar) {
+            row.push_back(mask);
+            return;
         }
         
+        if (sum > tar or idx == -1) {
+            return;
+        }
+        
+        if ((mask & (1<<idx)) > 0 or mat[idx] == pre) {
+            tryForm(idx-1, mat, sum, row, mask, pre);
+        } else {
+            int nextMask = (mask | (1<<idx));
+            tryForm(idx-1, mat, sum + mat[idx], row, nextMask, pre);
+            tryForm(idx-1, mat, sum, row, mask, mat[idx]);
+        }
+    }
+    
+    bool dfs(int pos, int mask, vector<int>& mat) {
+        if (pos == 3) {
+            return true;
+        }
+        
+        vector<int> v;
+        int sum = 0, idx = 0, nextMask = mask;
+        for (int i = mat.size()-1; i >=0; i--) {
+            if ((mask & (1<<i)) == 0) {
+                sum += mat[i];
+                idx = i-1;
+                nextMask |= (1<<i);
+                break;
+            }
+        }
+        
+        tryForm(idx, mat, sum, v, nextMask, -1);
+        int res = false;
+
+        for (int i = 0; i < v.size(); i++) {
+            res = (res or dfs(pos+1, v[i], mat));
+            if (res) return true;
+        }
+    
         return false;
+    }
+    
+    
+    bool makesquare(vector<int>& mat) {
+        int n =  mat.size();
+        if (n < 4) return false;
+        sort(mat.begin(), mat.end());
+        int sum = 0;
+        for (auto& m : mat) sum += m;
+        if (sum % 4 != 0) return false;
+        tar = sum / 4;
+
+        return dfs(0, 0, mat);
     }
 };
