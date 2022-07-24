@@ -1,35 +1,63 @@
 class Solution {
 public:
+    static bool cmp(vector<int> &a , vector <int> &b){
+        if(a[0]!=b[0]) return a[0] < b[0];
+        else return a[1] < b[1];
+    }
+    
     vector<int> kWeakestRows(vector<vector<int>>& mat, int k) {
-        /*
-        Steps ->
+//         vector <vector<int>> v;
+//         for(int i = 0 ; i < mat.size() ; i++){
+//             int sum = 0;
+//             for(int j = 0; j < mat[0].size() ; j++){
+//                 sum += mat[i][j];
+//             }
+//             v.push_back(vector <int> {sum,i}); //soldiers,row
+//         }
         
-        1. We'll store no of soldies and rowIndex in a pair
-        2. Sort the pair 
-        3. then, we'll push first k elements (the second 
-        of the pair) into the ans vector
+//         sort(v.begin() , v.end() , cmp);
+//         vector <int> soln;
+//         for(int i = 0 ; i < k ; i++) soln.push_back(v[i][1]);
+//         return soln;
         
-        */
-        vector<int> ans;
-        vector<pair<int, int>> vect;
         
-        int m = mat.size(), n = mat[0].size();
-        for(int i=0; i<m; i++)
-        {
-            int j=0, cntSol = 0;
-            while(j<n && mat[i][j++] == 1)
-                cntSol++;
+        
+        // Find first and last occurence in descending sorted array of 0 & 1
+        
+        // if first element is 1, then first occurence is 0
+        // else there is no 1 in the array
+        
+        int n = mat[0].size();
+        vector <vector <int>> v;
+        for(int i = 0 ; i < mat.size() ; i++){
             
-            vect.push_back({cntSol, i});
+            if(mat[i][0]==0) v.push_back(vector <int> {0,i}); //soldiers,row
+            else{
+                // find last occurence of 1
+                int last = -1;
+                int l = 0;
+                int h = n-1;
+                while(l <= h){
+                    int m = l + (h-l)/2;
+                    if(mat[i][m]==1){
+                        last = m;
+                        l = m+1;
+                    }
+                    else{
+                        h = m-1;
+                    }
+                }
+                cout<<last<<endl;
+            v.push_back(vector <int> {last+1 , i});
+            }
+            
         }
+        sort(v.begin() , v.end() , cmp);
+                vector <int> soln;
+                for(int i = 0 ; i < k ; i++) soln.push_back(v[i][1]);
+                return soln;
         
-        sort(vect.begin(), vect.end());
         
-        for(int i=0; i<k; i++)
-        {
-            int ele = vect[i].second;
-            ans.push_back(ele);
-        }
-        return ans;
+        
     }
 };
