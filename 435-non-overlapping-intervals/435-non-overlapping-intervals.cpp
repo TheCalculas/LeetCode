@@ -1,19 +1,26 @@
-bool comp(vector<int> &a,vector<int> &b) {
-	return a[1]<b[1];
-}
 class Solution {
 public:
-	int eraseOverlapIntervals(vector<vector<int>>& intervals) {
-		int ans=-1;      
-		if(intervals.size()==0) return 0;       
-		sort(intervals.begin(),intervals.end(),comp);      //custom comperator is used.
-		vector<int> prev= intervals[0];
-
-		for(vector<int> i: intervals) {
-			if(prev[1]>i[0]) {
-				ans++;                //we dont update previous, because i[1] will be grater then prev[1]
-			}else prev=i;           // we want the end point to be minimum
-		}
-		return ans;                 //ans was initially made -1 because our prev and intervals[0] will always match
-	}
+   
+    int eraseOverlapIntervals(vector<vector<int>>& intervals) {
+        
+        int i,j,n=intervals.size();
+        vector<pair<int,int> > v;
+        for(i=0;i<n;i++)
+        {
+            v.push_back(make_pair(intervals[i][1],intervals[i][0]));
+            
+        }
+        sort(v.begin(),v.end());
+        int en =INT_MIN,ct=0;
+        for(i=0;i<n;i++)
+        {
+            if(en<=v[i].second )
+            {
+                ct++;
+                en = v[i].first;
+            }
+        }
+        return n-ct;
+       
+    }
 };
