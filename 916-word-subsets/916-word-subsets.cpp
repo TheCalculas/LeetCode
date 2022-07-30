@@ -1,29 +1,32 @@
-class Solution
-{
-    public:
-        vector<int> countFreq(string & word)
-        {
-            vector<int> freq(26);
-            for (auto &c: word) freq[c - 'a']++;
-            return freq;
+class Solution {
+public:
+    vector<string> wordSubsets(vector<string>& words1, vector<string>& words2) {
+        int sub[26] = {0}, temp[26] = {0};
+        vector<string> res;
+        
+        for (const string & s: words2) {
+            for (int i = 0; i < s.size(); i++)
+                temp[s[i] - 'a']++;
+            for (int j = 0; j < 26; j++)
+                sub[j] = max(sub[j], temp[j]);
+            memset(temp, 0, 104);
         }
-    vector<string> wordSubsets(vector<string> &A, vector<string> &B)
-    {
-        vector<int> Maxfreq(26);	
-        vector<string> ans;
-        for (auto &word: B)
-        {
-            vector<int> freq = countFreq(word);
-            for (int i = 0; i < 26; i++) Maxfreq[i] = max(Maxfreq[i], freq[i]);
+        
+        for (const string & s: words1) {
+            copy(begin(sub), end(sub), begin(temp));
+            for (int i = 0; i < s.size(); i++)
+                temp[s[i] - 'a']--;
+            int k = 0;
+            while (k < 26) if (temp[k++] > 0) break;
+            if (k == 26) res.push_back(s);
         }
-        for (auto &word: A)
-        {
-            vector<int> freq = countFreq(word);
-            int i = 0;
-            for (; i < 26; i++)
-                if (freq[i] < Maxfreq[i]) break;
-            if (i == 26) ans.push_back(word);
-        }
-        return ans;
+        
+        return res;
     }
 };
+
+static auto _ = []() {
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    return 0;
+}();
