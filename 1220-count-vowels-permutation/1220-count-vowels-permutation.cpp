@@ -1,25 +1,23 @@
-static vector<vector<int>> relation={{1},{0,2},{0,1,3,4},{2,4},{0}}; 
 class Solution {
 public:
-    int MOD=1e9+7;
-    vector<vector<int>> memo;
-    int dp(int n,int v)                        
-    {
-        if(n==1)
-            return 1;
-        if(memo[n][v]!=-1)
-            return memo[n][v];
-        memo[n][v]=0;
-        for(int &i:relation[v])
-            memo[n][v]+=dp(n-1,i),memo[n][v]%=MOD;
-        return memo[n][v];
-    }
-    int countVowelPermutation(int n) 
-    {
-        int result=0;
-        memo.resize(n+1,vector<int>(5,-1));
-        for(int i=0;i<5;i++)
-            result+=dp(n,i),result%=MOD;
-        return result;
+    int countVowelPermutation(int n) {
+        
+        long long int a = 1, e = 1, i = 1, o = 1, u = 1, mod = 1e9 + 7;
+        for (int k = 2; k <= n; k++) {
+            long long int ta = a, ti = i, te = e, to = o, tu = u;
+            a = te;
+            e = ta + ti;
+            i = ta + te + to + tu;
+            o = ti + tu;
+            u = ta;
+            
+            a %= mod;
+            e %= mod;
+            i %= mod;
+            o %= mod;
+            u %= mod;
+        }
+        return (a + e + i + o + u) % mod;
+        
     }
 };
