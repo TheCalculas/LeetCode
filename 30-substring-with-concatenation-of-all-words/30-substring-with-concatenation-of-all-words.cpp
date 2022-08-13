@@ -10,8 +10,7 @@ class Solution
             vector <int> indexes;
             for (int i = 0; i < n - num *len + 1; i++)
             {
-                unordered_map<string, int> seen;
-                int j = 0;
+                unordered_map<string, int> seen; int j = 0;
                 for (; j < num; j++)
                 {
                     string word = s.substr(i + j *len, len);
