@@ -1,17 +1,33 @@
 class Solution {
 public:
-    int closestMeetingNode(vector<int>& e, int node1, int node2) {
-    int res = -1, min_dist = INT_MAX;
-    vector<int> m1(e.size(), -1), m2(e.size(), -1);
-    for (int i = node1, dist = 0; i != -1 && m1[i] == -1; i = e[i])
-        m1[i] = dist++;
-    for (int i = node2, dist = 0; i != -1 && m2[i] == -1; i = e[i]) {
-        m2[i] = dist++;
-        if (m1[i] >= 0 && max(m1[i], m2[i]) <= min_dist) {
-            res = max(m1[i], m2[i]) == min_dist ? min(i, res) : i;
-            min_dist = max(m1[i], m2[i]);
+    int closestMeetingNode(vector<int>& edges, int node1, int node2) {
+        int n=edges.size(),ans=-1,mn=INT_MAX;
+        vector<int> vis(n,-1);
+        int i=node1,e=0;
+        while(vis[i]==-1){
+            
+            vis[i]=e++;
+            i=edges[i];
+            if(i==-1) break;
         }
+        i=node2,e=0;
+        vector<int> vis1(n,-1);
+        while(vis1[i]==-1){
+            vis1[i]=e++;
+            if(vis[i]!=-1){
+                int mx=max(vis1[i],vis[i]);
+                if(mx<mn){
+                    ans=i;
+                    mn=mx;
+                }
+                else if(mx==mn){
+                    ans=min(i,ans);
+                }
+            }
+            i=edges[i];
+            if(i==-1) break;
+        }
+        
+        return ans;
     }
-    return res;
-}
 };
