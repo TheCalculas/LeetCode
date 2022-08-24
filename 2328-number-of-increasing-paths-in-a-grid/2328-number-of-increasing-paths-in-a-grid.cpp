@@ -1,49 +1,61 @@
-#define ll long long int
-ll mod=1e9+7;
 class Solution {
 public:
-    vector<int> dx={1,-1,0,0};
-    vector<int> dy={0,0,1,-1};
-    int n,m;
-    bool isvalid(int i,int j)
-    {
-        return (i>=0&&i<n&&j>=0&&j<m);
-    }
-    int dfs( int i, int j,vector<vector<int>> &dp,vector<vector<int>> &grid)
-    {
-        if(dp[i][j]!=0)
-        return dp[i][j];
-        if(i<0||j<0||i>=n&&j>=m)
-        return 0;
-        int ans=1;
-        for(int k=0;k<4;k++)
-        {
-            int new_x,new_y;
-            new_x=i+dx[k];
-            new_y=j+dy[k];
+      int ax[4]={1,-1,0,0};
+    int ay[4]={0,0,-1,1};
+     bool isvalid(int i,int j,int n,int m ){
+         if(i<0||j<0||i>=n||j>=m){
+            return false;
+        } 
+         return true;
+     }
+      int dp[1001][1001];
+    int dfs(int i,int j,vector<vector<int>>& grid   ){
+             int n=grid.size(),m=grid[0].size();
             
-            if(isvalid(new_x,new_y)&&grid[new_x][new_y]>grid[i][j])
-            {
-                ans=(ans%mod+dfs(new_x,new_y,dp,grid)%mod)%mod;
-            }
+           if(dp[i][j]!=-1){
+               
+               return dp[i][j];
+          }
+          dp[i][j]=1;
+        for(int k=0;k<4;k++){
+             int x=ax[k]+i;
+             int y=ay[k]+j;
+             if(isvalid(x,y,n,m)&&grid[x][y]>grid[i][j] ){
+                 
+                  dp[i][j]=(dp[i][j]%1000000007+dfs(x,y,grid )%1000000007)%1000000007;
+                 
+             }
         }
-        
-        return dp[i][j]=ans%mod;
+        return dp[i][j]%1000000007;
+         
+         
     }
     int countPaths(vector<vector<int>>& grid) {
-        n=grid.size();
-        m=grid[0].size();
-
-        vector<vector<bool>> vis(n,vector<bool>(m,false));
-        vector<vector<int>> dp(n,vector<int>(m,0));
-        ll sum=0;
-        for(int i=0;i<n;i++)
-        {
-            for(int j=0;j<m;j++)
-            {
-                 sum=(sum%mod+dfs(i,j,dp,grid)%mod)%mod;
+     
+        int n=grid.size(),m=grid[0].size();
+        int  res=0;
+          
+        memset(dp,-1,sizeof(dp));
+        
+        for(int i=0;i<n;i++){
+                   
+            for(int j=0;j<m;j++){
+            
+                   dfs(i,j,grid   );
+              
+               
             }
         }
-        return sum%mod;
+            for(int i=0;i<n;i++){
+                   
+            for(int j=0;j<m;j++){
+            
+                  res+=dp[i][j];
+                 res=res%1000000007;
+              
+               
+            }
+        }
+        return res%1000000007 ;
     }
 };
