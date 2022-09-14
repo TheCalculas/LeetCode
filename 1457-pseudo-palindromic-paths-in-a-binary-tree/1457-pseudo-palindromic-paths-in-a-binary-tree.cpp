@@ -9,46 +9,31 @@
  *  TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  *};
  */
-class Solution
-{
-    public:
-
-        int count = 0;
-
-    void f(TreeNode *root, vector<int> mp)
-    {
-        if (root == NULL)
-        {
-            return;
+class Solution {
+    int solve(TreeNode *root, int freq[]) {
+        if (root == nullptr) {
+            return 0;
         }
-        mp[root->val]++;
-        if (root->left == NULL && root->right == NULL)
-        {
-            int odd_count = 0;
-
-            for (auto x: mp)
-            {
-                if (x % 2)
-                {
-                    odd_count++;
+        
+        freq[root->val]++;
+        if (root->left == nullptr && root->right == nullptr) {
+            int count = 0;
+            for (int i = 0; i <= 9; i++) {
+                if ((freq[i] & 1) != 0) {
+                    count++;
                 }
             }
-
-            if (odd_count <= 1)
-            {
-                count++;
-            }
-
-            return;
+            freq[root->val]--;
+            return (count <= 1) ? 1 : 0;
         }
-        f(root->left, mp);
-        f(root->right, mp);
+        
+        int ans = solve(root->left, freq) + solve(root->right, freq);
+        freq[root->val]--;
+        return ans;
     }
-
-    int pseudoPalindromicPaths(TreeNode *root)
-    {
-        vector<int> mp(10, 0);
-        f(root, mp);
-        return count;
+public:
+    int pseudoPalindromicPaths (TreeNode* root) {
+        int freq[10] = {0};
+        return solve(root, freq);
     }
 };
