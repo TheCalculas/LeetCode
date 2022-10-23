@@ -1,23 +1,16 @@
 class Solution {
 public:
+    #define ll long long
     vector<int> findErrorNums(vector<int>& nums) {
-        int n = nums.size();
-        vector<int> v(n, 0);
-        for(int i=0; i<n; i++){
-            v[nums[i]-1]++;
+        // m-r 
+        ll s=0,ss=0,n=nums.size();
+        for(auto &it:nums){
+            s+=it;
+            ss+=(it*it);
         }
-        // vector<int> vt;
-        for(auto x: v)
-        {
-            cout<<x<<" ";
-        }
-        int repeat;
-        int no_exist;
-        for(int i=0; i<n; i++)
-        {
-            if(v[i]==2) repeat = i;
-            if(v[i]==0) no_exist = i;
-        }
-        return {repeat+1, no_exist+1};
+        
+        ll rs=(n*(n+1))/2,rss=((n)*(n+1)*(2*n+1))/6;
+        ll mpr=(ss-rss)/(s-rs);
+        return {(int)(mpr+(s-rs))/2,(int)(mpr-(s-rs))/2};
     }
 };
