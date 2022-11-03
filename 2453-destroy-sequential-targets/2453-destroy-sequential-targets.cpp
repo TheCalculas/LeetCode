@@ -1,12 +1,12 @@
 class Solution {
 public:
     int destroyTargets(vector<int>& nums, int space) {
-        map<int, int> mp, freq;
+        unordered_map<int, int> mp, freq;
         for(auto x: nums)
         {
             mp[x]++;
         }
-        map<int, vector<int>> vv;
+        unordered_map<int, vector<int>> vv;
         for(auto x: mp)
         {
             int n = x.first;
