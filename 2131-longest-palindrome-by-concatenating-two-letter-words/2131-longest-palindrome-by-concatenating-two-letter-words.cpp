@@ -1,33 +1,19 @@
 class Solution {
 public:
     int longestPalindrome(vector<string>& words) {
-       map<string,int> mp;
-        for(int i=0;i<words.size();i++)
-            mp[words[i]]++;
-
-        int ans=0,m=0;
-        bool flag=false;
-        for(auto x: mp)
-        {
-            string s=x.first;
-            string t=s;
-            reverse(s.begin(),s.end());
-            if(s==t)
-            {
-                ans+=x.second/2;
-                if(x.second%2) 
-                    flag=true;
-            }
-            else
-            {
-                if(mp.count(s))
-                    ans+=min(x.second,mp[s]),mp.erase(s);
+        vector<vector<int>> counter(26, vector<int>(26, 0));
+        int ans = 0;
+        for (string w: words) {
+            int a = w[0] - 'a', b = w[1] - 'a';
+            if (counter[b][a]) ans += 4, counter[b][a]--;
+            else counter[a][b]++;
+        }
+        for (int i = 0; i < 26; i++) {
+            if (counter[i][i]) {
+                ans += 2;
+                break;
             }
         }
-        ans=ans*4;
-        if(flag) 
-            ans+=2;
         return ans;
-
     }
 };
