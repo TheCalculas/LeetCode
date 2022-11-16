@@ -1,42 +1,66 @@
 class Solution {
 public:
-    int countSwap(vector<int>& t){
-        int count = 0;
-        map<int,int> mp;
-        vector<int> u;
-        for(int i = 0; i < t.size(); ++i){
-            mp[t[i]] = i;
-            u.push_back(t[i]);
+    int findMinSwap(vector<int> &arr, int n)
+    {
+        vector<pair<int, int>> temp(n);
+        for (int i = 0; i < n; i++)
+        {
+            temp[i].first = arr[i];
+            temp[i].second = i;
         }
-        sort(u.begin(), u.end());
-        for(int i = 0; i < t.size(); ++i){
-            if(t[i] != u[i] ){  // if not at correct place update the values in map and t array
-                t[mp[u[i]]] = t[i];
-                mp[t[i]] = mp[u[i]];
-                mp[u[i]] = i;
-                t[i] = u[i];
-                count++;
+
+
+        //sort the temp vector according to the values
+        sort(temp.begin(), temp.end());
+        
+        int minimum_swaps = 0;
+        int i = 0;
+        while (i < n)
+        {
+            // If there is no need to swap then continue
+            if (temp[i].second == i or temp[i].first == arr[i])
+            {
+                ++i;
+                continue;
             }
+            else
+            {
+                // swap the values accordingly
+                swap(temp[i].first, temp[temp[i].second].first);
+                swap(temp[i].second, temp[temp[i].second].second);
+                
+                if (temp[i].second != i)
+                    i--;
+            }
+            
+            minimum_swaps++;
+            i++;
         }
-        return count;
+        return minimum_swaps;
     }
-    int minimumOperations(TreeNode* root) {
-        int ans = 0;
+    
+    int minimumOperations(TreeNode* root) 
+    {
         queue<TreeNode*> q;
         q.push(root);
-        while(!q.empty()){
-            int n = q.size();
-            vector<int> t;
-            while(n--){
-                TreeNode* node = q.front();
-                t.push_back(node->val);
+        int number = 0;
+        
+        while(!q.empty())
+        {
+            int s = q.size();
+            vector<int> level;
+            
+            for(int i=0;i<s;i++)
+            {
+                auto node = q.front();
                 q.pop();
-                if(node->left != NULL) q.push(node->left);
-                if(node->right != NULL) q.push(node->right);
+                level.push_back(node->val);
+                
+                if(node->left) q.push(node->left);
+                if(node->right) q.push(node->right);
             }
-            for(auto c: t) cout<<c<<" "; cout<<endl;
-            ans += countSwap(t);
+            number += findMinSwap(level,level.size());
         }
-        return ans;
+        return number;
     }
 };
