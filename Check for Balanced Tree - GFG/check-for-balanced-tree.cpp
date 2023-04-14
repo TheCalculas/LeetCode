@@ -100,50 +100,27 @@ struct Node
     }
 };
  */
-#define ll long long
-#define vi vector<int>
-#define vvi vector<vi>
-#define pii pair<int, int>
-#define vii vector<pii>
-#define rep(i, a, b) for (int i = a; i < b; i++)
-#define rrep(i, a, b) for (int i = a; i>=b; i--)
-#define sortv(v) sort(v.begin(), v.end())
-#define rsortv(v) sort(v.rbegin(), v.rend())
-#define revv(v) reverse(v.begin(), v.end())
-#define _l cout << "+------------+" << endl;
-#define _p(x) cout << #x << " : " << x << endl;
-#define _d(x) cerr << #x << " : " << x << endl;
-#define out(v) for (auto &x : v) cout << x << " ";
-#define set_bits(x) __builtin_popcountll(x)
-#define endl '\n'
-#define MOD 1000000007 // 998244353
-const string yes = "YES";
-const string no = "NO";
-#define null NULL
-#define r right
-#define l left 
-#define no Node
-#define tn TreeNode
-#define val data
 
-bool flag = true;
 class Solution{
     public:
-    int h(no* root)
-    {
-        if(root==null) return 0;
-        int a= h(root->l);
-        int b = h(root->r);
-        if(abs(a-b)>1) flag = false;
-        return 1 + max(a, b);
-    }
     //Function to check whether a binary tree is balanced or not.
+    bool f = true;
+    int h(Node* root)
+    {
+        if(root==NULL) return 0;
+        
+        int lef = h(root->left);
+        int rig = h(root->right);
+        if(abs(lef-rig)>1) f = false;
+        return max(lef, rig)+1;
+    }
+    
     bool isBalanced(Node *root)
     {
-        flag = true;
         //  Your Code here
+        f = true;
         h(root);
-        return flag;
+        return f;
     }
 };
 
