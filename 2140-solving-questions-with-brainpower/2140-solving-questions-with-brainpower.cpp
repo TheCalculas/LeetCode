@@ -15,7 +15,21 @@ public:
     }
     long long mostPoints(vector<vector<int>>& q) {
         int idx = 0;
-        vector<ll> dp(q.size()+1, -1);
-        return f(q, idx, dp);
+        // vector<ll> dp(q.size()+1, -1);
+        vector<ll> dp(q.size()+1, 0);
+        // return f(q, idx, dp);
+        // convert it into tablular
+        for(int idx = q.size()-1; idx>=0; idx--)
+        {
+            ll a = q[idx][0], b = 0;
+            
+            if(idx+q[idx][1]+1<q.size())
+            a = q[idx][0] + dp[idx+q[idx][1]+1];
+            if(idx+1<q.size())
+            b = dp[idx+1];
+            dp[idx] = max(a, b);
+            
+        }
+        return dp[0];
     }
 };
