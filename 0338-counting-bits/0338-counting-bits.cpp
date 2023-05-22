@@ -1,12 +1,11 @@
 class Solution {
 public:
     vector<int> countBits(int n) {
-        vector<int> v;
-        for(int i = 0; i<=n; i++)
+        vector<int> dp(n+1, 0);
+        for(int i = 1; i<=n; i++)
         {
-            int a = __builtin_popcount(i);
-            v.push_back(a);
+            dp[i] = dp[i/2] + i%2;
         }
-        return v;
+        return dp;
     }
 };
