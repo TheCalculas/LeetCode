@@ -1,23 +1,45 @@
 class Solution {
 public:
-    int lengthOfLIS(vector<int>& nums) {
-        // previous ko acount mei lelo
-        int n = nums.size();
-        vector<int> dp(n+1, 1);
-        vector<int> hash(n+1, -1);
-        int mx = 1;
-        for(int i = 0; i<n; i++)
+    
+    int f(vector<int> &nums, int prev_idx, int idx)
+    {
+        if(idx==nums.size())
         {
-            for(int j = 0; j<i; j++)
-            {
-                if(nums[j]<nums[i]&&dp[i]<dp[j]+1)
-                {
-                    dp[i] = 1 + dp[j];
-                    mx = max(mx, dp[i]); 
-                }
-            }
-            
+            return 0;
         }
-        return mx;
+        int notTake = 0 + f(nums, prev_idx, idx+1);  
+        int take = 0;
+        if(prev_idx==-1||nums[prev_idx]<nums[idx])
+        {
+            take = 1 + f(nums, idx, idx+1);
+        }
+        return max(take, notTake);
+    }
+    
+    int lengthOfLIS(vector<int>& arr) {
+        // return f(nums, -1, 0);
+        int n = arr.size();
+        
+        vector<vector<int>> dp(n+1,vector<int>(n+1,0));
+    
+        for(int ind = n-1; ind>=0; ind --){
+            for (int prev_index = ind-1; prev_index >=-1; prev_index --){
+
+                int notTake = 0 + dp[ind+1][prev_index +1];
+
+                int take = 0;
+
+                if(prev_index == -1 || arr[ind] > arr[prev_index]){
+
+                    take = 1 + dp[ind+1][ind+1];
+                }
+
+                dp[ind][prev_index+1] = max(notTake,take);
+
+            }
+        }
+
+        return dp[0][0];
+        
     }
 };
