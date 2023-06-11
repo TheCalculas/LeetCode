@@ -1,22 +1,29 @@
 class Solution {
 public:
     void nextPermutation(vector<int>& nums) {
-    	int n = nums.size(), k, l;
-    	for (k = n - 2; k >= 0; k--) {
-            if (nums[k] < nums[k + 1]) {
+        int a = -1 , b = -1;
+        for(int i = nums.size()-2; i>=0; i--)
+        {
+            if(nums[i+1]>nums[i]) {
+                a = i;
                 break;
             }
         }
-    	if (k < 0) {
-    	    reverse(nums.begin(), nums.end());
-    	} else {
-    	    for (l = n - 1; l > k; l--) {
-                if (nums[l] > nums[k]) {
-                    break;
-                }
-            } 
-    	    swap(nums[k], nums[l]);
-    	    reverse(nums.begin() + k + 1, nums.end());
+        cout<<a<<endl;
+        if(a==-1)
+        {
+            reverse(nums.begin(), nums.end());
+            return;
         }
+        for(int i = nums.size()-1; i>=0; i--)
+        {
+            if(nums[i]>nums[a])
+            {
+                b = i; break;
+            }
+        }
+        swap(nums[a], nums[b]);
+        reverse(nums.begin()+1+a, nums.end());
+        return ;
     }
-}; 
+};
