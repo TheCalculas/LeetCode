@@ -1,10 +1,11 @@
 class Solution {
 public:
     
-    void f(vector<int>& v, int idx, set<vector<int>>& st)
+    void f(vector<int>& v, int idx, map<vector<int>, int>& st)
     {
         if(idx==v.size()){
-            st.insert(v);
+            st[v]++;
+            return;
         }
         
         for(int i = idx; i<v.size(); i++)
@@ -18,12 +19,12 @@ public:
     vector<vector<int>> permuteUnique(vector<int>& nums) {
         vector<vector<int>> v;
         sort(nums.begin(), nums.end());
-        set<vector<int>> st;
+        map<vector<int>, int> st;
         f(nums, 0, st);
         
         for(auto x: st)
         {
-            v.push_back(x);
+            v.push_back(x.first);
         }
         return v;
     }
