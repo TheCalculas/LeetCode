@@ -40,8 +40,8 @@ public:
                                     v[i+dx][j+dy] = 0; // this was the most imp thing dude!
                                 }
                             }
-                        mx = max(mx, area);
                     }
+                        mx = max(mx, area);
                     
                 }
             }
