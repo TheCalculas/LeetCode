@@ -10,29 +10,43 @@ class Solution
     //from the source vertex S.
     vector <int> dijkstra(int V, vector<vector<int>> adj[], int S)
     {
-        // Code here
-        vector<int> dist(V, 10e7);
-        queue<vector<int>> q;
-        priority_queue<vector<int>, vector<vector<int>>, greater<vector<int>>> pq;
-        pq.push({0, S});
+        // vector<pair<int, int>> graph[V];
+        
+        // for(int i =0; i<adj.size(); i++)
+        // {
+        //     for(int j = 0; j<adj[i].size(); i++)
+        //     {
+                
+        //     }
+        // }
+        
+        
+        vector<int> dist(V, INT_MAX);
         dist[S] = 0;
-        vector<int> vis(V, 0);
+        priority_queue<
+        pair<int, int>, vector<pair<int, int>>,
+        greater<pair<int, int>>
+        > pq;
+        pq.push({0, S}); // node, dist
+        
         while(pq.size())
         {
-            auto x = pq.top();
-            vis[x[1]] = 1;
-            pq.pop();
-            if(x[0]<dist[x[1]])
+            auto a = pq.top(); pq.pop();
+            int srcdist = a.first;
+            for(auto x: adj[a.second])
             {
-                dist[x[1]] = x[0];
+                // node, weight
+                int distance = srcdist + x[1];
+                if(distance<dist[x[0]])
+                {
+                    dist[x[0]] = distance;
+                    pq.push({distance, x[0]});
+                }
             }
-            for(auto u: adj[x[1]])
-            {
-                if(vis[u[0]]==0)
-                    pq.push({x[0]+u[1], u[0]});
-            }
+            
         }
         return dist;
+
     }
 };
 
