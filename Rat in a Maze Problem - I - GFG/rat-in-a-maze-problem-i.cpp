@@ -10,41 +10,58 @@ using namespace std;
 
 class Solution{
     public:
-    // create a funciton for depth first search in the following matrix
-    void f(vector<vector<int>>& v, int x, int y, string &s, vector<string> &vs)
+    bool f(vector<vector<int>>&v, int n, int x, int y,
+        string s, vector<string> &res)
     {
-        // check if it is out of bounds
-        if(x<0||y<0||x>=v.size()||y>=v[0].size()) return;
-        if(v[x][y]!=1) return;
-        if(x==v.size()-1&&y==v[0].size()-1) vs.push_back(s);
-        // marked as visited
-        v[x][y]= 0;
-        vector<int> a = {0, 1, 0, -1};
-        vector<int> b = {1, 0, -1, 0};
-        for(int i = 0; i<4; i++)
+        if(x<0||y<0||x>=n||y>=n) return false;
+        if(x==n-1&&y==n-1)
         {
-            if(a[i]==0&&b[i]==1) s.push_back('R');
-            if(a[i]==0&&b[i]==-1) s.push_back('L');
-            if(a[i]==-1&&b[i]==0) s.push_back('U');
-            if(a[i]==1&&b[i]==0) s.push_back('D');
-            f(v, x+a[i], y + b[i], s, vs);
-            s.pop_back();
+            if(v[x][y]==0) return false;
+            res.push_back(s);
+            return true;
         }
-        v[x][y] = 1;
         
+        
+        // sare paths dekhlo bhenchod
+        if(v[x][y]==0) return false;
+        
+        // vector<vector<int>> a = {{0
+        v[x][y] = 0;
+        // for(int i = 0; i<4; i++)
+        // {
+            
+        // }
+        bool ff = false;
+        s.push_back('D');
+        ff = ff|f(v, n, x+1, y, s, res);
+        s.pop_back();
+        
+        s.push_back('U');
+        ff = ff|f(v, n, x-1, y, s, res);
+        s.pop_back();
+        
+        s.push_back('L');
+        ff = ff|f(v, n, x, y-1, s, res);
+        s.pop_back();
+        
+        s.push_back('R');
+        ff = ff|f(v, n, x, y+1, s, res);
+        s.pop_back();
+        
+        v[x][y] = 1;
+        return ff;
     }
     vector<string> findPath(vector<vector<int>> &v, int n) {
         // Your code goes here
-        vector<string> vs;
-        int x = 0, y =0;
-        string s = "";
-        f(v, x, y, s, vs);
-        return vs;
+        vector<string> res;
+        string s ="";
+        if(f(v, n, 0, 0, s, res))
+        return res;
+        else return {"-1"};
     }
 };
 
     
-
 
 
 //{ Driver Code Starts.
